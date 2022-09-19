@@ -1,0 +1,30 @@
+{
+  "scope": "beyond-js",
+  "name": "widgets",
+  "license": "MIT",
+  "version": "0.0.10",
+  "modules": {
+    "path": "./"
+  },
+  "deployment": {
+    "distributions": [
+      {
+        "name": "npm",
+        "npm": {
+          "platforms": {
+            "web": "web",
+            "ssr": "ssr"
+          }
+        }
+      },
+      {
+        "name": "web-tsc",
+        "platform": "web",
+        "port": 9992,
+        "ts": {
+          "compiler": "tsc"
+        }
+      }
+    ]
+  }
+}

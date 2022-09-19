@@ -1,0 +1,10 @@
+{
+  "name": "render",
+  "platforms": [
+    "web",
+    "android",
+    "ios"
+  ],
+  "bundle": "ts",
+  "files": "*"
+}

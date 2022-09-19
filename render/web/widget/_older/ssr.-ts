@@ -1,0 +1,45 @@
+// import {config} from "../from-hydrator/config";
+
+export class WidgetSSR {
+    render() {
+        /*
+        const attrs = this.#attrs;
+        const attributes = new Map(attrs.map(attr => [attr, this.getAttribute(attr)]));
+
+        // Find the widget
+        const widget = [...config.widgets].find(([, widget]) => {
+            if (widget.element !== this.localName) return false;
+            return attrs.reduce((found, attr) =>
+                found && attributes.get(attr) === widget.attributes.get(attr), true);
+        });
+        if (!widget) {
+            console.error(`Widget of current element not found`, this);
+            return;
+        }
+
+        const [id, {html, css}] = widget;
+        this.#ssrId = id;
+
+        const appendStyle = (bundle: string) => {
+            const style: HTMLLinkElement = document.createElement('link');
+
+            const baseUrl = '/';
+            style.type = 'text/css';
+            style.href = `${baseUrl}${bundle}.css`;
+            style.rel = 'stylesheet';
+            bundle !== 'global' && style.setAttribute('bundle', bundle);
+            this.shadowRoot.appendChild(style);
+        }
+
+        // Append global and bundle styles
+        css && appendStyle(css);
+        appendStyle('global');
+
+        // Append the widget html
+        const root = this.shadowRoot;
+        const span = document.createElement('span');
+        span.innerHTML = html;
+        root.appendChild(span);
+         */
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "routing",
+  "platforms": [
+    "web",
+    "android",
+    "ios",
+    "ssr"
+  ],
+  "bundle": "ts",
+  "files": "*"
+}

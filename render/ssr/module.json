@@ -1,0 +1,8 @@
+{
+  "name": "render",
+  "platforms": [
+    "ssr"
+  ],
+  "bundle": "ts",
+  "files": "*"
+}
