@@ -2,6 +2,7 @@ import {BeyondWidget, IWidgetSpecs} from './widget';
 import {instances} from './instances';
 import {attributes} from './attributes';
 import './anchor';
+declare const process: any;
 
 export /*bundle*/
 const widgets = new class BeyondWidgets extends Map<string, IWidgetSpecs> {

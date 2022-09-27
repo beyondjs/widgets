@@ -7,6 +7,7 @@ import Layouts from "./layouts";
 import {Route} from './route';
 
 declare const bimport: (resource: string, version?: number) => Promise<any>;
+declare const process: any;
 
 export /*bundle*/
 const manager = typeof process === 'object' ? void 0 : new class Manager {

@@ -1,15 +1,24 @@
 {
   "scope": "beyond-js",
   "name": "widgets",
-  "license": "MIT",
   "version": "0.0.10",
+  "license": "MIT",
   "modules": {
     "path": "./"
+  },
+  "libraries": {
+    "imports": [
+      "@beyond-js/kernel"
+    ]
   },
   "deployment": {
     "distributions": [
       {
         "name": "npm",
+        "maps": "external",
+        "ports": {
+          "bundles": 9120
+        },
         "npm": {
           "platforms": {
             "web": "web",
@@ -20,7 +29,19 @@
       {
         "name": "web-tsc",
         "platform": "web",
-        "port": 9992,
+        "ports": {
+          "bundles": 9121
+        },
+        "ts": {
+          "compiler": "tsc"
+        }
+      },
+      {
+        "name": "ssr-tsc",
+        "platform": "ssr",
+        "ports": {
+          "bundles": 9122
+        },
         "ts": {
           "compiler": "tsc"
         }

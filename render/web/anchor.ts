@@ -1,6 +1,7 @@
 import type {routing as r} from '@beyond-js/kernel/routing';
 
 declare const bimport: (resource: string, version?: number) => Promise<any>;
+declare const process: any;
 
 typeof process !== 'object' && customElements.define('beyond-link', class extends HTMLElement {
     #routing: typeof r;
