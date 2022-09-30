@@ -9,15 +9,13 @@ class GlobalCSS extends Events {
     constructor(widget: BeyondWidget) {
         super();
         this.#widget = widget;
-    }
 
-    async initialise() {
-        const host = await this.#widget.host;
+        const {host} = this.#widget;
         const version = this.#version !== 0 ? `?version=${this.#version}` : '';
         this.#link = `${host}global.css${version}`;
     }
 
-    #link: string;
+    readonly #link: string;
     get link(): string {
         return this.#link;
     }

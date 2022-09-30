@@ -45,9 +45,8 @@ class BeyondWidget extends Element {
         return this.#specifier;
     }
 
-    get host(): Promise<string> {
-        // return (<any>import.meta).resolve(this.#specifier);
-        return Promise.resolve(`${location.origin}/`);
+    get host(): string {
+        return `${location.origin}/`;
     }
 
     get is() {

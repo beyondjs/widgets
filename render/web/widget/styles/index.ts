@@ -4,7 +4,7 @@ import Link from './link';
 import {GlobalCSS} from './global';
 
 export /*bundle*/
-class StylesManager extends Set<string> {
+class StylesManager {
     readonly #events: Events = new Events();
     on = (event: string, listener: () => void) => this.#events.on(event, listener);
     off = (event: string, listener: () => void) => this.#events.off(event, listener);
@@ -119,7 +119,7 @@ class StylesManager extends Set<string> {
         this.#last = _links;
 
         _links.unshift(this.#globalcss.link);
-        const links: Link[] = _links.map(link => new Link(link))
+        const links: Link[] = _links.map(link => new Link(link));
 
         // Add the new style sheets
         let changed = false;
@@ -137,7 +137,6 @@ class StylesManager extends Set<string> {
     }
 
     constructor(widget: BeyondWidget) {
-        super();
         this.#globalcss = new GlobalCSS(widget);
         this.#promise = new Promise(resolve => this.#resolve = resolve);
     }
@@ -151,9 +150,8 @@ class StylesManager extends Set<string> {
         if (this.#initialised) throw new Error(`Widget styles already initialised`);
         this.#initialised = true;
 
-        await this.#globalcss.initialise();
         this.#update(links);
-        this.#globalcss.on('change', this.#refresh)
+        this.#globalcss.on('change', this.#refresh);
     }
 
     destroy() {
