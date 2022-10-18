@@ -1,4 +1,4 @@
-import type {manager as m, Layout} from '@beyond-js/widgets/routing';
+import type {manager as m, Layout, PageInstance} from '@beyond-js/widgets/routing';
 import {widgets, BeyondWidget} from '@beyond-js/widgets/render';
 import {ssr} from './ssr';
 
@@ -99,7 +99,7 @@ customElements.define('beyond-layout-children', class extends HTMLElement {
     }
 
     #render = () => {
-        this.#layout.children.forEach(child => {
+        this.#layout.children.forEach((child: Layout | PageInstance) => {
             const {children} = this.shadowRoot;
             let element: BeyondWidget = <BeyondWidget>[...children].find(
                 element => element.getAttribute('data-child-id') === child.id);
