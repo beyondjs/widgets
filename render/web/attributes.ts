@@ -1,7 +1,6 @@
 import {Events} from '@beyond-js/kernel/core';
 
-export /*bundle*/
-const attributes = new class extends Events {
+export class Attributes extends Events {
     #values: Map<string, string> = new Map();
     get values() {
         return this.#values;
@@ -20,3 +19,4 @@ const attributes = new class extends Events {
     }
 }
 
+export /*bundle*/ const attributes: Attributes = new Attributes();

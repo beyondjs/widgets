@@ -1,11 +1,11 @@
 import {BeyondWidget, IWidgetSpecs} from './widget';
 import {instances} from './instances';
-import {attributes} from './attributes';
+import {attributes, Attributes} from './attributes';
 import './anchor';
+
 declare const process: any;
 
-export /*bundle*/
-const widgets = new class BeyondWidgets extends Map<string, IWidgetSpecs> {
+class BeyondWidgets extends Map<string, IWidgetSpecs> {
     #ssr = true;
     get ssr() {
         return this.#ssr;
@@ -23,7 +23,7 @@ const widgets = new class BeyondWidgets extends Map<string, IWidgetSpecs> {
         return instances;
     }
 
-    get attributes() {
+    get attributes(): Attributes {
         return attributes;
     }
 
@@ -53,3 +53,5 @@ const widgets = new class BeyondWidgets extends Map<string, IWidgetSpecs> {
         });
     }
 }
+
+export /*bundle*/ const widgets: BeyondWidgets = new BeyondWidgets();
