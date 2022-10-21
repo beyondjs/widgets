@@ -1,5 +1,5 @@
 import type {URI} from '@beyond-js/kernel/routing';
-import {BeyondWidget} from '@beyond-js/widgets/render';
+import type {BeyondWidget} from '@beyond-js/widgets/render';
 import {Route} from './route';
 import {manager} from './manager';
 

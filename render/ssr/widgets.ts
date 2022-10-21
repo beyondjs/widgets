@@ -1,3 +1,4 @@
+export /*bundle*/
 interface IWidgetSpecs {
     name: string
     vspecifier: string,
@@ -12,6 +13,10 @@ interface IWidgetSpecs {
         sr: boolean
     }
 }
+
+export /*bundle*/ type StylesManager = any;
+
+export /*bundle*/ type BeyondWidget = HTMLElement;
 
 export /*bundle*/
 const widgets = new class BeyondWidgets extends Map<string, IWidgetSpecs> {
