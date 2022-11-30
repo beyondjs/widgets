@@ -1,10 +1,15 @@
 import {BeyondWidget} from './index';
 import checksum from './checksum';
-import {Renderer} from './renderer';
+import {IWidgetRendered, Renderer} from './renderer';
 
 export class WidgetSR {
     readonly #widget: BeyondWidget;
     readonly #renderer: Renderer;
+
+    #prerender: IWidgetRendered;
+    get prerender() {
+        return this.#prerender;
+    }
 
     constructor(widget: BeyondWidget) {
         this.#widget = widget;
@@ -61,7 +66,10 @@ export class WidgetSR {
                 console.error(`Error fetching static rendered widget "${specs.name}". Status code: ${response.status}`);
                 return;
             }
-            const sr = await response.json();
+            const sr: IWidgetRendered = await response.json();
+
+            // Register as a pre-rendered widget (required to hydrate the store)
+            this.#prerender = sr;
 
             // Finally render the widget
             await this.#renderer.render(sr);

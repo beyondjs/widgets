@@ -25,7 +25,7 @@ abstract class WidgetServerController extends WidgetControllerBase {
     protected constructor(params: { specs?: IWidgetSpecs, widget?: HTMLElement }) {
         super(params);
         const styles = new DependenciesStyles(this.specs.vspecifier);
-        styles.elements.forEach(({href}) => this.#styles.push(href));
+        styles.elements.forEach(({href}: { href: string }) => this.#styles.push(href));
 
         this.#styles.unshift(`##_!${this.pkg}!_##global.css`);
     }

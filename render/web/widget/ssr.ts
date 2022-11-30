@@ -93,7 +93,10 @@ export class WidgetSSR {
                 console.error(`Error fetching SSR of widget "${name}". Status code: ${response.status}`);
                 return;
             }
-            const sr = await response.json();
+            const sr: IWidgetRendered = await response.json();
+
+            // Register as a pre-rendered widget (required to hydrate the store)
+            this.#prerender = sr;
 
             // Finally render the widget
             await this.#renderer.render(sr);
