@@ -41,7 +41,8 @@ class StylesManager {
     }
 
     onloaded = (event: Event | string): boolean => {
-        const href = typeof event === 'string' ? event : (<HTMLLinkElement>event.currentTarget).href;
+        const href = typeof event === 'string' ? event :
+            (<HTMLLinkElement>event.currentTarget).getAttribute('href');
         if (!this.#loaded.has(href)) {
             console.warn(`Stylesheet href="${href}" not registered`);
             return;

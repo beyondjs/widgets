@@ -88,7 +88,6 @@ abstract class WidgetClientController extends WidgetControllerBase {
 
         // Type check in widget is disabled due to the cyclical reference between controller and widget
         const prerender: any = (<any>this.#widget).ssr.prerender;
-        console.log('prerender:', prerender);
         if (prerender) {
             const cached = prerender?.store;
             await this.#store?.hydrate(cached);
