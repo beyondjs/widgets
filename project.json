@@ -1,7 +1,7 @@
 {
   "scope": "beyond-js",
   "name": "widgets",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "modules": {
     "path": "./"
