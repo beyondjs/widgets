@@ -6,10 +6,8 @@
   "modules": {
     "path": "./"
   },
-  "libraries": {
-    "imports": [
-      "@beyond-js/kernel"
-    ]
+  "dependencies": {
+    "@beyond-js/kernel": "^0.1.5"
   },
   "deployment": {
     "distributions": [
