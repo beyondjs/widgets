@@ -1,4 +1,5 @@
 {
   "dependencies": {
+    "@beyond-js/kernel": "^0.1.7"
   }
 }
