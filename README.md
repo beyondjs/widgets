@@ -1,4 +1,4 @@
-# `@beyond-js/widgets`
+# `@beyond-js/widgets` package
 
 `@beyond-js/widgets` is a package for [BeyondJS](https://beyondjs.com),
 which is a platform for creating web projects as independent microfrontends. This package provides the ability to integrate new widget packages that support view or rendering libraries, making it easy to extend the functionality of your web project.
