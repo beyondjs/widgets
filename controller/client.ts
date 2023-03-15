@@ -81,7 +81,7 @@ abstract class WidgetClientController extends WidgetControllerBase {
 
     async initialise() {
         if (!this.Widget) {
-            throw new Error(`Widget "${this.#widget.localName}" does not expose a Widget property`);
+            throw new Error(`The return value of the Widget property is undefined. "${this.#widget.localName}" widget`);
         }
 
         this.#store = this.createStore?.();

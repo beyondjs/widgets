@@ -1,7 +1,6 @@
 {
-  "scope": "beyond-js",
-  "name": "widgets",
-  "version": "0.1.3",
+  "name": "@beyond-js/widgets",
+  "version": "0.1.4",
   "description": "Create web projects as standalone microfrontends with beyondJS",
   "license": "MIT",
   "modules": {
@@ -35,8 +34,5 @@
         }
       }
     ]
-  },
-  "dependencies": {
-    "@beyond-js/kernel": "~0.1.8"
   }
 }
