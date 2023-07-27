@@ -1,38 +1,41 @@
 {
-  "name": "@beyond-js/widgets",
-  "version": "0.1.4",
-  "description": "Create web projects as standalone microfrontends with beyondJS",
-  "license": "MIT",
-  "modules": {
-    "path": "./"
-  },
-  "libraries": {
-    "imports": [
-      "@beyond-js/kernel"
-    ]
-  },
-  "deployment": {
-    "distributions": [
-      {
-        "name": "web",
-        "platform": "web",
-        "ports": {
-          "bundles": 9121
-        },
-        "ts": {
-          "compiler": "tsc"
-        }
-      },
-      {
-        "name": "ssr",
-        "platform": "ssr",
-        "ports": {
-          "bundles": 9122
-        },
-        "ts": {
-          "compiler": "tsc"
-        }
-      }
-    ]
-  }
+	"name": "@beyond-js/widgets",
+	"version": "0.1.5",
+	"description": "Create web projects as standalone microfrontends with beyondJS",
+	"license": "MIT",
+	"modules": {
+		"path": "./"
+	},
+	"libraries": {
+		"imports": [
+			"@beyond-js/kernel"
+		]
+	},
+	"deployment": {
+		"distributions": [
+			{
+				"name": "web",
+				"platform": "web",
+				"ports": {
+					"bundles": 9121
+				},
+				"ts": {
+					"compiler": "tsc"
+				}
+			},
+			{
+				"name": "ssr",
+				"platform": "ssr",
+				"ports": {
+					"bundles": 9122
+				},
+				"ts": {
+					"compiler": "tsc"
+				}
+			}
+		]
+	},
+	"dependencies": {
+		"@beyond-js/kernel": "~0.1.8"
+	}
 }
