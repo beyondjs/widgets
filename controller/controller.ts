@@ -2,6 +2,11 @@ import { IWidgetSpecs, widgets } from '@beyond-js/widgets/render';
 
 export /*bundle*/
 interface IWidgetStore {
+	// This property is used in case the class that implements it
+	// does not make explicit use of the interface methods,
+	// this ensures a correct implementation of the interface in case a class does not implement SSR methods
+	isStore?: boolean;
+
 	toJSON?(): object;
 
 	hydrate?(cached: object): Promise<void> | void;
