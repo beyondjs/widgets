@@ -42,13 +42,11 @@ class PageInstance {
 	get parents(): IParents {
 		// Ascending list of containers layouts of the current page
 		const value: IWidgetSpecs[] = [];
-
 		const widget = widgets.get(this.element);
-		if (!widget) {
-			throw new Error(`Widget "${this.element}" not found`);
-		}
-		let { layout } = widget;
 
+		if (!widget) throw new Error(`Widget "${this.element}" not found`);
+
+		let { layout } = widget;
 		while (layout) {
 			const found = [...widgets.values()].find(({ name }) => name === layout);
 			if (!found) {
