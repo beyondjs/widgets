@@ -5,7 +5,7 @@ import type {StylesManager} from '@beyond-js/widgets/render';
 import {DependenciesStyles} from '@beyond-js/kernel/styles';
 
 /**
- * The client widget react controller
+ * The client implementation of the widget controller
  */
 export /*bundle*/
 abstract class WidgetClientController extends WidgetControllerBase {

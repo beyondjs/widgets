@@ -1,10 +1,6 @@
 {
-  "name": "application",
-  "platforms": [
-    "web",
-    "android",
-    "ios"
-  ],
-  "bundle": "ts",
-  "files": "*"
+	"name": "application",
+	"platforms": ["web", "android", "ios"],
+	"bundle": "ts",
+	"files": "*"
 }
