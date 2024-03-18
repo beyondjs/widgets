@@ -5,7 +5,7 @@
 	"repository": "https://github.com/beyondjs/widgets",
 	"license": "MIT",
 	"modules": {
-		"path": "./"
+		"path": "./modules"
 	},
 	"dependencies": {
 		"@beyond-js/kernel": "~0.1.9",
