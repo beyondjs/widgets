@@ -1,4 +1,12 @@
+import type { URI } from '@beyond-js/kernel/routing';
 import { IWidgetSpecs, widgets } from '@beyond-js/widgets/render';
+
+export /*bundle*/
+interface IPageWidgetController {
+	show?: () => void;
+	hide?: () => void;
+	onQueryStringChange: ({ qs }: { qs: URI['qs'] }) => void;
+}
 
 export /*bundle*/
 interface IWidgetStore {
