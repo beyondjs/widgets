@@ -1,6 +1,7 @@
 import type { URI } from '@beyond-js/kernel/routing';
-import type { Route } from '../route';
+import type { Route } from './route';
 import { widgets, IWidgetSpecs } from '@beyond-js/widgets/render';
+import { PageURI } from './uri';
 
 export interface IParents {
 	error?: string;
@@ -11,18 +12,17 @@ let id = 0;
 
 export /*bundle*/
 class PageInstance {
-	readonly #uri: URI;
+	readonly #uri: PageURI;
 	get uri() {
 		return this.#uri;
 	}
 
-	readonly #route: Route;
 	get route() {
-		return this.#route;
+		return this.#uri.route;
 	}
 
 	get element() {
-		return this.#route.page;
+		return this.#uri.route.page;
 	}
 
 	get is(): string {
@@ -32,6 +32,11 @@ class PageInstance {
 	readonly #id: number;
 	get id(): string {
 		return `${this.element}:${this.#id}`;
+	}
+
+	constructor(uri: URI, route: Route) {
+		this.#uri = new PageURI({ uri, route });
+		this.#id = ++id;
 	}
 
 	/**
@@ -55,11 +60,5 @@ class PageInstance {
 		}
 
 		return { value };
-	}
-
-	constructor(uri: URI, route: Route) {
-		this.#uri = uri;
-		this.#route = route;
-		this.#id = ++id;
 	}
 }

@@ -1,21 +1,38 @@
-import {PageInstance} from "./instance";
-import type {URI} from '@beyond-js/kernel/routing';
-import type {Route} from '../route';
+import type { BeyondWidget } from '@beyond-js/widgets/render';
+import type { URI } from '@beyond-js/kernel/routing';
+import type { Route } from './route';
+import type { manager } from '../manager';
+import { PageInstance } from './instance';
+
+declare function require(module: string): any;
 
 type pathname = string;
 
 export default class extends Map<pathname, PageInstance> {
-    instance(id: string) {
-        return [...this.values()].find(instance => instance.id === id);
-    }
+	// @deprecated: Use .obtain instead of this method
+	instance(id: string) {
+		return [...this.values()].find(instance => instance.id === id);
+	}
 
-    register(uri: URI, route: Route): PageInstance {
-        const {pathname} = uri;
+	obtain({ widget, id }: { widget: BeyondWidget; id: string }) {
+		if (id) return this.instance(id);
 
-        let instance: PageInstance = this.has(pathname) ? this.get(pathname) : undefined;
-        instance = instance ? instance : new PageInstance(uri, route);
-        this.set(pathname, instance);
+		const child = widget.getAttribute('data-child-id');
+		return (<typeof manager>require('../manager')).pages.instance(child);
+	}
 
-        return instance;
-    }
+	register(uri: URI, route: Route): PageInstance {
+		const { pathname } = uri;
+
+		const instance: PageInstance = (() => {
+			if (!this.has(pathname)) return new PageInstance(uri, route);
+
+			const instance = this.get(pathname);
+			instance.uri.update(uri);
+			return instance;
+		})();
+		this.set(pathname, instance);
+
+		return instance;
+	}
 }

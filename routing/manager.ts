@@ -4,7 +4,7 @@ import { LayoutInstance } from './layouts/layout';
 import { PageInstance } from './pages/instance';
 import Pages from './pages';
 import Layouts from './layouts';
-import { Route } from './route';
+import { Route } from './pages/route';
 
 declare const bimport: (resource: string, version?: number) => Promise<any>;
 declare const process: any;
