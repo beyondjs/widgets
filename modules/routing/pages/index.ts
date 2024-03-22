@@ -10,15 +10,15 @@ type pathname = string;
 
 export default class extends Map<pathname, PageInstance> {
 	// @deprecated: Use .obtain instead of this method
-	instance(id: string) {
+	instance(id: string): PageInstance {
 		return [...this.values()].find(instance => instance.id === id);
 	}
 
-	obtain({ widget, id }: { widget: BeyondWidget; id: string }) {
+	obtain({ widget, id }: { widget?: BeyondWidget; id?: string }): PageInstance {
 		if (id) return this.instance(id);
 
 		const child = widget.getAttribute('data-child-id');
-		return (<typeof manager>require('../manager')).pages.instance(child);
+		return this.instance(child);
 	}
 
 	register(uri: URI, route: Route): PageInstance {
@@ -31,6 +31,7 @@ export default class extends Map<pathname, PageInstance> {
 			instance.uri.update(uri);
 			return instance;
 		})();
+
 		this.set(pathname, instance);
 
 		return instance;
