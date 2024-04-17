@@ -78,14 +78,18 @@ class Manager {
 
 		const page: PageInstance = this.#instances.pages.register(uri, route);
 
-		// Property page.parents is an array that contains the descending list of layouts where the page is contained
-		const { error, value: descending } = page.parents;
+		// Property page.parents.value is an array that contains the list of layouts where the page is contained
+		const { error, value: layouts } = page.parents;
 		if (error) {
 			console.error(`Page on "${uri.uri}" cannot be shown: ${error}`);
 			return done();
 		}
 
-		this.#main.select(page, descending);
+		// If the root layout specified in the page widget is the same as the application layout,
+		// then remove from the list
+		layouts.length && layouts[0].name === this.main.element && layouts.shift();
+
+		this.#main.activate(page, layouts);
 		return done();
 	}
 }

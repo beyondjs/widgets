@@ -40,25 +40,30 @@ class PageInstance {
 	}
 
 	/**
-	 * Returns the ascending layouts
+	 * Returns the ascending layouts for the current page
 	 *
 	 * @return {{error?: string, parents?: IWidgetSpecs[]}}
 	 */
 	get parents(): IParents {
-		// Ascending list of containers layouts of the current page
-		const value: IWidgetSpecs[] = [];
+		// List of container layouts of the current page
+		const output: IWidgetSpecs[] = [];
+
+		// Look for the page's layout in the widgets specifications registry
 		let { layout } = widgets.get(this.element);
+
 		while (layout) {
+			// Look for the layout specification in the widgets specification
+			// (as the layout is also another widget)
 			const found = [...widgets.values()].find(({ name }) => name === layout);
 			if (!found) {
 				const error = `Layout "${layout}" not found`;
 				return { error };
 			}
 
-			value.unshift(found);
+			output.unshift(found);
 			layout = found.layout;
 		}
 
-		return { value };
+		return { value: output };
 	}
 }

@@ -54,20 +54,17 @@ class LayoutInstance extends Events {
 	}
 
 	/**
-	 * Selects a page
+	 * Activates the current page being navigated
+	 * Create the layout instance if not previously created
 	 *
-	 * @param {PageInstance} page The page being selected (navigated)
-	 * @param {IWidgetSpecs[]} descending The descending layouts
+	 * @param {PageInstance} page The page being navigated
 	 */
-	select(page: PageInstance, descending: IWidgetSpecs[]) {
-		if (descending.length && descending[0].name === this.#element) {
-			console.log(`Invalid layout configuration. Layout element "${this.#element}" is already created`);
-			return;
-		}
-
+	activate(page: PageInstance, layouts: IWidgetSpecs[]) {
+		// Get the child instance (page or layout)
+		// Create the layout instance if not previously created
 		const child: LayoutChild = (() => {
-			if (!descending.length) return page;
-			const { name: element } = descending[0];
+			if (!layouts.length) return page;
+			const { name: element } = layouts[0];
 
 			const found = <LayoutInstance>[...this.#children.values()].find(child => child.element === element);
 			if (found) return found;
@@ -79,11 +76,29 @@ class LayoutInstance extends Events {
 
 		this.#children.set(child.id, child);
 
+		// Check if current active child has changed
 		const changed = this.#active !== child;
+
+		// Deactivate layout if last active layout is not the current one
+		child.is === 'layout' && changed && (child as LayoutInstance).deactivate();
+
+		// Set the active child
 		this.#active = child;
 
-		descending.shift();
-		child.is === 'layout' && (child as LayoutInstance).select(page, descending);
+		// Continue iterating the following layouts in the list
+		layouts.shift();
+		child.is === 'layout' && (child as LayoutInstance).activate(page, layouts);
 		changed && this.trigger('change');
+	}
+
+	deactivate() {
+		const active = this.#active;
+		if (!active) {
+			console.warn(`Layout "${this.#element}" doesn't have any active child`);
+			return;
+		}
+
+		active.is === 'layout' && (active as LayoutInstance).deactivate();
+		this.trigger('change');
 	}
 }
