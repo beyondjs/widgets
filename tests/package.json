@@ -39,5 +39,9 @@
 			}
 		]
 	},
-	"libraries": {}
+	"libraries": {
+		"imports": [
+			"@beyond-js/widgets"
+		]
+	}
 }

@@ -119,6 +119,7 @@ customElements.define(
 				}
 
 				// The show and hide methods are defined in the page controller
+
 				const active = this.#instance.active === child;
 				const controller: any = element.controller;
 
@@ -133,6 +134,7 @@ customElements.define(
 						if (!controller) {
 							throw new Error(`Controller of element widget "${child.element}" is undefined`);
 						}
+
 						this.#active === element && controller.show?.();
 					};
 
