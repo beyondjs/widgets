@@ -98,6 +98,7 @@ class LayoutInstance extends Events {
 			return;
 		}
 
+		this.#active = void 0;
 		active.is === 'layout' && (active as LayoutInstance).deactivate();
 		this.trigger('change');
 	}
