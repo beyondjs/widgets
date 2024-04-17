@@ -1,0 +1,6 @@
+{
+	"name": "page-2",
+	"platforms": ["web", "android", "ios"],
+	"bundle": "ts",
+	"files": "*"
+}

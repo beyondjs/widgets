@@ -1,0 +1,6 @@
+{
+	"name": "layout-2",
+	"platforms": ["web", "android", "ios"],
+	"bundle": "ts",
+	"files": "*"
+}

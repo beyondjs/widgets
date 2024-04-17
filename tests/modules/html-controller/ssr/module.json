@@ -1,0 +1,6 @@
+{
+	"name": "html-controller",
+	"platforms": ["ssr"],
+	"bundle": "ts",
+	"files": "*"
+}

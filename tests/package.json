@@ -1,0 +1,43 @@
+{
+	"name": "@beyond-js/widgets-tests",
+	"version": "0.0.1",
+	"description": "Testing environment for @beyond-js/widgets",
+	"repository": "https://github.com/beyondjs/widgets",
+	"license": "MIT",
+	"modules": {
+		"path": "./modules"
+	},
+	"dependencies": {
+		"@beyond-js/kernel": "~0.1.9",
+		"@beyond-js/events": "~0.0.7"
+	},
+	"deployment": {
+		"distributions": [
+			{
+				"name": "web",
+				"platform": "web",
+				"ports": {
+					"bundles": 8080
+				}
+			},
+			{
+				"name": "web-ts",
+				"platform": "web",
+				"ports": {
+					"bundles": 8081
+				},
+				"ts": {
+					"compiler": "tsc"
+				}
+			},
+			{
+				"name": "ssr",
+				"platform": "ssr",
+				"ports": {
+					"bundles": 8082
+				}
+			}
+		]
+	},
+	"libraries": {}
+}
