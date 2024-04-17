@@ -1,6 +1,11 @@
 {
-	"name": "layout-1",
+	"name": "layout-one",
 	"platforms": ["web", "android", "ios"],
-	"bundle": "ts",
-	"files": "*"
+	"widget": {
+		"is": "layout",
+		"ts": "*",
+		"element": {
+			"name": "app-layout-one"
+		}
+	}
 }

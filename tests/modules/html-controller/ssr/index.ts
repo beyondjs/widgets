@@ -1,6 +1,6 @@
 import { WidgetServerController, IWidgetRendered } from '@beyond-js/widgets/controller';
 
-export abstract class HTMLController extends WidgetServerController {
+export /*bundle*/ abstract class HTMLController extends WidgetServerController {
 	render(props: Record<string, any>): IWidgetRendered {
 		const html = this.html(props);
 		return { html };

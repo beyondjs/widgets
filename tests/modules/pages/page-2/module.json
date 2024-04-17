@@ -1,6 +1,14 @@
 {
-	"name": "layout-1",
+	"name": "page-two",
 	"platforms": ["web", "android", "ios"],
-	"bundle": "ts",
-	"files": "*"
+	"widget": {
+		"route": "/page-two",
+		"is": "page",
+		"ts": {
+			"files": "*"
+		},
+		"element": {
+			"name": "app-page-two"
+		}
+	}
 }
