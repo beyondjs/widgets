@@ -9,7 +9,7 @@ let manager: typeof m;
 customElements.define(
 	'beyond-layout-children',
 	class extends HTMLElement {
-		#instance: LayoutInstance;
+		#layout: LayoutInstance;
 		#active: BeyondWidget;
 
 		connectedCallback() {
@@ -105,7 +105,10 @@ customElements.define(
 		};
 
 		#render = () => {
-			this.#instance.children.forEach((child: LayoutInstance | PageInstance) => {
+			let activeElement: BeyondWidget;
+
+			// Iterate over the layout children form the routing manager
+			this.#layout.children.forEach((child: LayoutInstance | PageInstance) => {
 				const { children } = this.shadowRoot;
 				let element: BeyondWidget = <BeyondWidget>(
 					[...children].find(element => element.getAttribute('data-child-id') === child.id)
@@ -120,12 +123,11 @@ customElements.define(
 
 				// The show and hide methods are defined in the page controller
 
-				const active = this.#instance.active === child;
+				const active = this.#layout.active === child;
 				const controller: any = element.controller;
+				active && (activeElement = element);
 
 				if (active && element !== this.#active) {
-					this.#active = element;
-
 					const show = () => {
 						element.removeEventListener('controller.initialised', show);
 						if (element !== this.#active) return;
@@ -145,12 +147,14 @@ customElements.define(
 
 				element.hidden = !active;
 			});
+
+			this.#active = activeElement;
 		};
 
 		// Check if there are ssr elements that must be hydrated (set the child id)
 		#hydrate() {
 			const { children } = this.shadowRoot;
-			const layout = this.#instance;
+			const layout = this.#layout;
 
 			if (!children.length) return;
 			if (children.length > 1) {
@@ -165,9 +169,9 @@ customElements.define(
 			if (this.container === null) return;
 
 			const done = (layout: LayoutInstance) => {
-				this.#instance = layout;
+				this.#layout = layout;
 				this.#hydrate();
-				this.#instance.on('change', this.#render);
+				this.#layout.on('change', this.#render);
 				this.#render();
 			};
 
