@@ -41,6 +41,7 @@ export class Renderer {
 		const links: string[] = [];
 		const resources = holder.querySelectorAll('link');
 		resources.forEach(node => links.push(node.href));
+
 		links.length && (await styles.initialise(links));
 
 		resources.forEach(
@@ -49,6 +50,7 @@ export class Renderer {
 
 		// Wait for style sheets be ready
 		await styles?.ready;
+
 		if (this.#ct !== ct) return;
 
 		// Once the styles are loaded, show the content of the widget
