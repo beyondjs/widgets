@@ -80,7 +80,7 @@ class LayoutInstance extends Events {
 		const changed = this.#active !== child;
 
 		// Deactivate layout if last active layout is not the current one
-		this.#active && child.is === 'layout' && changed && (child as LayoutInstance).deactivate();
+		changed && this.#active?.is === 'layout' && (this.#active as LayoutInstance).deactivate();
 
 		// Set the active child
 		this.#active = child;
