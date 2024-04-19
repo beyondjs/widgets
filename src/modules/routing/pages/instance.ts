@@ -49,8 +49,10 @@ class PageInstance {
 		const output: IWidgetSpecs[] = [];
 
 		// Look for the page's layout in the widgets specifications registry
-		let { layout } = widgets.get(this.element);
+		const widget = widgets.get(this.element);
+		if (!widget) throw new Error(`Widget "${this.element}" not found`);
 
+		let { layout } = widget;
 		while (layout) {
 			// Look for the layout specification in the widgets specification
 			// (as the layout is also another widget)
