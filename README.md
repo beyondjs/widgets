@@ -1,27 +1,65 @@
-# `@beyond-js/widgets` package
+# BeyondJS Widgets
 
-`@beyond-js/widgets` is a package for [BeyondJS](https://beyondjs.com),
-which is a platform for creating web projects as independent microfrontends. This package provides the ability to integrate new widget packages that support view or rendering libraries, making it easy to extend the functionality of your web project.
+## Introduction
+
+Beyond-JS Widgets is a versatile web-components framework designed for developers to create a range of web solutions
+from simple widgets to comprehensive applications. It seamlessly integrates with popular frameworks like React, Vue, and
+Svelte and supports various rendering methods like Server-Side, Static, and Client-Side Rendering. This flexibility
+enhances performance and user experience.
 
 ## Features
 
--   Supports a wide range of rendering libraries, including React, Vue, Svelte, and SolidJS
--   Flexible and easily extensible, allowing for the integration of new libraries in the future
+### Versatility and Integration
 
-## Getting Started
+-   **Pages and Layouts:** Widgets can represent entire pages or layouts, simplifying complex web application
+    construction.
+-   **Elements in Existing Applications:** Easily integrate widgets as individual elements in existing applications.
 
-1. Install the `@beyond-js/widgets` package in your BeyondJS project:
+### Modular and Universal Development
 
-```
-npm install @beyond-js/widgets
-```
+-   **Modular Design:** Each widget is a distinct module, improving code management and efficiency.
+-   **Universal Application:** Widgets function seamlessly on both client and server sides.
 
-2. Read the [corresponding section of the BeyondJS documentation](https://beyondjs.com/docs/packages/beyondjs#beyondjswidgets) to learn how to add new rendering engines to your project.
+### Framework Integration
 
-## Contributing
+-   **CSS Encapsulation:** Styles are isolated within each web component, preventing conflicts and ensuring stable
+    styling.
+-   **Reusability:** Widgets are reusable across different parts of an application, easing maintenance and updates.
 
-We welcome contributions to `@beyond-js/widgets`. If you'd like to contribute, please read the [Contribution Guidelines](https://beyond-js.org/docs/contributing).
+## Widget System
 
-## License
+### Modular Design
 
-`@beyond-js/widgets` is [MIT licensed](LICENSE).
+Widgets are automatically loaded when their corresponding web elements are inserted into the DOM. This lazy loading
+ensures optimal performance and resource use.
+
+### Controller's Role
+
+-   **Controller:** A critical component within each JS+CSS module, coordinating the rendering of the widget into HTML.
+-   **Rendering Modes:** Widgets detect the necessary rendering mode upon DOM insertion, enhancing rendering efficiency.
+
+### Integration with View Frameworks
+
+Widgets are compatible with various JavaScript frameworks, enabling them to serve multiple roles, such as pages or
+layouts, through simple settings.
+
+## Rendering and Hydration
+
+Widgets support hybrid rendering techniques and facilitate the hydration process, smoothly transitioning from
+server-rendered content to dynamic client-side updates.
+
+### Rendering Options
+
+-   **Server-Side Rendering (SSR):** Dynamically generates HTML on the server, improving load times.
+-   **Static Rendering (SR):** Pre-resolves and compiles HTML content, optimizing mobile performance.
+-   **Client-Side Rendering (CSR):** Renders content on the client side, suitable for dynamic applications.
+
+### Web Composition Suite (WCS)
+
+-   **Single-Page Applications:** WCS enhances user experience in SPAs by managing routing, layout, and transitions.
+-   **Layout Containers:** The `beyond-layout-children` web component manages layouts and dynamic content, supporting a
+    hierarchical application structure.
+
+## Documentation
+
+For more information, read the [BeyondJS widgets documentation](https://beyondjs.com/docs/widgets).

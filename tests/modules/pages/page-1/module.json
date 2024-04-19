@@ -1,0 +1,14 @@
+{
+	"name": "page-one",
+	"platforms": ["web", "android", "ios"],
+	"widget": {
+		"route": "/page-one",
+		"is": "page",
+		"ts": {
+			"files": "*"
+		},
+		"element": {
+			"name": "app-page-one"
+		}
+	}
+}
