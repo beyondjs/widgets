@@ -1,5 +1,5 @@
 .vscode
 .beyond
 .idea
-/node_modules
-package-lock.json
+/src/node_modules
+/tests/node_modules

@@ -1,0 +1,11 @@
+{
+	"name": "layout-two",
+	"platforms": ["web", "android", "ios"],
+	"widget": {
+		"is": "layout",
+		"ts": "*",
+		"element": {
+			"name": "app-layout-two"
+		}
+	}
+}

@@ -1,0 +1,6 @@
+{
+	"name": "html-controller",
+	"platforms": ["web", "android", "ios"],
+	"bundle": "ts",
+	"files": "*"
+}
