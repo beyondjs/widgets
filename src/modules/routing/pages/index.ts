@@ -1,7 +1,6 @@
 import type { BeyondWidget } from '@beyond-js/widgets/render';
 import type { URI } from '@beyond-js/kernel/routing';
 import type { Route } from './route';
-import type { manager } from '../manager';
 import { PageInstance } from './instance';
 
 declare function require(module: string): any;
