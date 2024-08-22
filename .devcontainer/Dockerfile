@@ -9,4 +9,4 @@ WORKDIR /workspaces/widgets
 ENV LANG="C.UTF-8"
 
 # Install beyond
-RUN npm i -g beyond@1.2.0 @beyond-js/scaffolding
+RUN npm i -g beyond@1.2.4 @beyond-js/scaffolding
