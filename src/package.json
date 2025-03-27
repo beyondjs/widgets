@@ -1,6 +1,6 @@
 {
 	"name": "@beyond-js/widgets",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"description": "Create web projects as standalone microfrontends with beyondJS",
 	"repository": "https://github.com/beyondjs/widgets",
 	"license": "MIT",
@@ -8,7 +8,7 @@
 		"path": "./modules"
 	},
 	"dependencies": {
-		"@beyond-js/kernel": "~0.1.9",
+		"@beyond-js/kernel": "~0.1.10",
 		"@beyond-js/events": "~0.0.7"
 	},
 	"deployment": {
