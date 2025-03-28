@@ -8,8 +8,8 @@
 		"path": "./modules"
 	},
 	"dependencies": {
-		"@beyond-js/kernel": "~0.1.9",
-		"@beyond-js/events": "~0.0.7"
+		"@beyond-js/events": "~0.0.7",
+		"@beyond-js/kernel": "^0.1.12"
 	},
 	"deployment": {
 		"distributions": [
