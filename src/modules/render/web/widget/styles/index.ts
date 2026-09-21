@@ -123,8 +123,9 @@ class StylesManager {
 	#update(_links?: string[]): boolean {
 		this.#last = _links;
 
-		_links.unshift(this.#globalcss.link);
-		const links: Link[] = _links.map(link => new Link(link));
+		// The shared sheet of the package comes first; the given list is left as the caller holds it
+		const global = this.#globalcss.link;
+		const links: Link[] = (global ? [global, ..._links] : [..._links]).map(link => new Link(link));
 
 		// Add the new style sheets
 		let changed = false;
@@ -158,6 +159,20 @@ class StylesManager {
 		this.#update(links);
 		this.#globalcss.on('change', this.#refresh);
 	}
+
+	/**
+	 * Whether a stylesheet failed to load: its previous version stays adopted and the failure is reported
+	 */
+	onerror = (event: Event | string): void => {
+		const href = typeof event === 'string' ? event : (<HTMLLinkElement>event.currentTarget).getAttribute('href');
+		if (!this.#loaded.has(href)) return;
+
+		// The version that failed is forgotten, so the last loaded one is what the purge keeps
+		this.#loaded.delete(href);
+		console.error(`Stylesheet "${href}" could not be loaded: the previous version is kept`);
+		this.#check();
+		this.#changed();
+	};
 
 	destroy() {
 		this.#globalcss.off('change', this.#refresh);

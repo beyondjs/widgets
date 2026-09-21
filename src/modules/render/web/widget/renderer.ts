@@ -34,8 +34,9 @@ export class Renderer {
 
 		if (!sr.html) return '';
 
-		const host = await this.#widget.host;
-		holder.innerHTML = (() => sr.html.replace(/##_!(.*?)!_##/g, () => host))();
+		// The server names the resources of a package by placeholder; the client addresses them from the package
+		const host = this.#widget.host ?? '';
+		holder.innerHTML = (() => sr.html.replace(/##_!(.*?)!_##/g, () => `${host}/styles/`))();
 
 		// Set the widget styles to be able to know when they are loaded to avoid FOUC (flash of unstyled content)
 		const links: string[] = [];
@@ -44,9 +45,11 @@ export class Renderer {
 
 		links.length && (await styles.initialise(links));
 
-		resources.forEach(
-			(node: HTMLLinkElement) => node.localName === 'link' && node.addEventListener('load', styles.onloaded)
-		);
+		resources.forEach((node: HTMLLinkElement) => {
+			if (node.localName !== 'link') return;
+			node.addEventListener('load', styles.onloaded);
+			node.addEventListener('error', styles.onerror);
+		});
 
 		// Wait for style sheets be ready
 		await styles?.ready;

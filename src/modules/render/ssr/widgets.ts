@@ -6,6 +6,7 @@ interface IWidgetSpecs {
 	is?: string;
 	layout?: string;
 	route?: string;
+	global?: boolean;
 	render: {
 		multilanguage?: boolean;
 		ssr: boolean;

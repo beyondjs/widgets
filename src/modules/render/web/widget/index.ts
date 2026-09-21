@@ -1,3 +1,4 @@
+import { instances as bundles } from '@beyond-js/kernel/bundle';
 import { instances } from '../instances';
 import { NodeWidget } from '../instances/node';
 import { WidgetSR } from './sr';
@@ -14,6 +15,12 @@ interface IWidgetSpecs {
 	is?: string;
 	layout?: string;
 	route?: string;
+
+	/**
+	 * Whether the package of the widget publishes a shared `global` stylesheet, which every widget of the
+	 * package adopts in its root before its own sheets. The compiler sets it from the package declarations.
+	 */
+	global?: boolean;
 	render: {
 		multilanguage?: boolean;
 		ssr: boolean;
@@ -25,6 +32,15 @@ interface IWidgetSpecs {
 // In SSR environment HTMLElement is not defined
 const Element = typeof HTMLElement === 'undefined' ? null : HTMLElement;
 
+/**
+ * The custom element of a widget: an open shadow root, a holder the view mounts in, and the client, server
+ * and static render paths, sequenced so that server output is in the holder before the client controller
+ * mounts, which is what lets a framework hydrate instead of rendering again.
+ *
+ * Resources are addressed from the module of the widget, never from the page: the base of a widget is the
+ * identity prefix of its package as the module loader received it, so a widget embedded in a page of
+ * another origin loads its shared stylesheet and its assets from where its code came from.
+ */
 export /*bundle*/
 class BeyondWidget extends Element {
 	readonly #specs: IWidgetSpecs;
@@ -45,8 +61,25 @@ class BeyondWidget extends Element {
 		return this.#specifier;
 	}
 
-	get host(): string {
-		return `${location.origin}/`;
+	/**
+	 * The address of the package of the widget, without the family and the subpath of the module
+	 * (`…/m/<package>@<version>`), from the address the runtime loaded the module from. It ends without a
+	 * slash. It is undefined until the module of the widget is loaded.
+	 */
+	get host(): string | undefined {
+		const uri: string = bundles.get(this.#specs.vspecifier)?.uri;
+		if (!uri) return;
+		const [location] = uri.split('?');
+		const at = location.lastIndexOf('/modules/');
+		return at === -1 ? location.slice(0, location.lastIndexOf('/')) : location.slice(0, at);
+	}
+
+	/**
+	 * The options the module of the widget was loaded with, which its companion resources are requested with
+	 */
+	get query(): string {
+		const uri: string = bundles.get(this.#specs.vspecifier)?.uri ?? '';
+		return uri.includes('?') ? uri.slice(uri.indexOf('?')) : '';
 	}
 
 	get is() {
@@ -141,7 +174,16 @@ class BeyondWidget extends Element {
 		this.#styles = new StylesManager(this);
 	}
 
+	#connected = false;
+
+	/**
+	 * The first connection registers the instance and creates the holder; a later connection, after the
+	 * element was removed and inserted again, mounts the same controller again in the same holder
+	 */
 	connectedCallback() {
+		if (this.#connected) return void this.#csr.reconnect();
+		this.#connected = true;
+
 		// Register the widget in the instances registry after connectedCallback is done
 		this.#wnode = instances.register(this);
 
@@ -150,9 +192,17 @@ class BeyondWidget extends Element {
 		this.shadowRoot.append(this.#holder);
 
 		this.#attributes.initialise(this.#holder);
+		this.#initialise().catch((exc: Error) => console.error(exc.stack));
+	}
 
-		this.#ssr.initialise().catch((exc: Error) => console.error(exc.stack));
-		this.#sr.initialise().catch((exc: Error) => console.error(exc.stack));
+	/**
+	 * Server and static rendering complete, or fail, before the client controller mounts: what they put in
+	 * the holder is what the controller hydrates. Their absence, or their failure, leaves an empty holder
+	 * and the controller renders from nothing.
+	 */
+	async #initialise() {
+		await this.#ssr.initialise().catch((exc: Error) => console.error(exc.stack));
+		await this.#sr.initialise().catch((exc: Error) => console.error(exc.stack));
 		this.#csr.initialise();
 	}
 

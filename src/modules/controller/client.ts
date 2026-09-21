@@ -5,7 +5,13 @@ import type { StylesManager } from '@beyond-js/widgets/render';
 import { DependenciesStyles } from '@beyond-js/kernel/styles';
 
 /**
- * The client implementation of the widget controller
+ * The client implementation of the widget controller.
+ *
+ * It owns what a mounted widget subscribes to: the stylesheets of its module and of the public modules
+ * its package depends on, adopted in its root through the styles manager of the element, and the updates
+ * of its module, which refresh the mounted view. Both subscriptions are released when the element is
+ * disconnected and taken again when it is connected again, so an element that is removed and inserted
+ * refreshes once per change and leaves nothing behind when it goes.
  */
 export /*bundle*/
 abstract class WidgetClientController extends WidgetControllerBase {
@@ -40,16 +46,22 @@ abstract class WidgetClientController extends WidgetControllerBase {
 		return styles;
 	}
 
+	/**
+	 * The stylesheets the module of the widget and its non-widget dependencies register
+	 */
+	readonly #dependencies: DependenciesStyles;
+
+	#links = () => [...this.#dependencies.elements].map(style => style.href);
+	#onstyles = () => this.styles.update(this.#links());
+
 	protected constructor(widget: HTMLElement) {
 		super({ widget });
 		this.#widget = widget;
 		this.#attributes = new WidgetAttributes(widget);
 
-		const styles = new DependenciesStyles(this.specs.vspecifier);
-		const links = () => [...styles.elements].map(style => style.href);
-
-		!this.styles.initialised && this.styles.initialise(links());
-		styles.on('change', () => this.styles.update(links()));
+		this.#dependencies = new DependenciesStyles(this.specs.vspecifier);
+		!this.styles.initialised && this.styles.initialise(this.#links());
+		this.#dependencies.on('change', this.#onstyles);
 	}
 
 	abstract mount(props?: Record<string, any>): void;
@@ -73,10 +85,55 @@ abstract class WidgetClientController extends WidgetControllerBase {
 	#refresh = () => this.refresh();
 
 	/**
-	 * Comes from the web component disconnectedCallback method call
+	 * The runtime package of the module of the widget, whose updates refresh the view
+	 */
+	get #package() {
+		return bundles.get(this.specs.vspecifier)?.package();
+	}
+
+	#subscribed = false;
+
+	#subscribe() {
+		if (this.#subscribed) return;
+		this.#subscribed = true;
+		this.#dependencies.on('change', this.#onstyles);
+		this.#package?.hmr.on('change', this.#refresh);
+	}
+
+	#unsubscribe() {
+		if (!this.#subscribed) return;
+		this.#subscribed = false;
+		this.#dependencies.off('change', this.#onstyles);
+		this.#package?.hmr.off('change', this.#refresh);
+	}
+
+	/**
+	 * Comes from the web component disconnectedCallback method call: the view is unmounted and nothing of
+	 * this controller listens any more
 	 */
 	disconnect() {
+		this.#unsubscribe();
 		this.unmount();
+	}
+
+	/**
+	 * Comes from the web component connectedCallback of an element that was disconnected: the view is
+	 * mounted again in the same holder, with the same store and attributes
+	 */
+	reconnect() {
+		this.#subscribe();
+		this.render();
+	}
+
+	/**
+	 * Releases everything the controller holds. It is not called by the element, which may be connected
+	 * again; a host that discards a widget for good calls it.
+	 */
+	dispose() {
+		this.#unsubscribe();
+		this.#dependencies.off('change', this.#onstyles);
+		this.#dependencies.destroy?.();
+		this.styles.destroy();
 	}
 
 	async initialise() {
@@ -86,7 +143,7 @@ abstract class WidgetClientController extends WidgetControllerBase {
 		const prerender: any = (<any>this.#widget).ssr.prerender;
 		if (prerender) {
 			const cached = prerender?.store;
-			await this.#store?.hydrate(cached);
+			cached && (await this.#store?.hydrate?.(cached));
 		}
 
 		this.#store?.fetch?.();
@@ -101,7 +158,6 @@ abstract class WidgetClientController extends WidgetControllerBase {
 			);
 			return;
 		}
-		const pkg = bundles.get(this.specs.vspecifier).package();
-		pkg.hmr.on('change', this.#refresh);
+		this.#subscribe();
 	}
 }

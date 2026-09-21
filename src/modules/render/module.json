@@ -1,0 +1,20 @@
+{
+	"platforms": [
+		"web",
+		"node"
+	],
+	"conditionals": {
+		"web": {
+			"entry": "web/index.ts",
+			"excludes": [
+				"ssr"
+			]
+		},
+		"node": {
+			"entry": "ssr/index.ts",
+			"excludes": [
+				"web"
+			]
+		}
+	}
+}

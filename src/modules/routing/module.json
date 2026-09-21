@@ -1,6 +1,6 @@
 {
-	"name": "routing",
-	"platforms": ["web", "android", "ios", "ssr"],
-	"bundle": "ts",
-	"files": "*"
+	"platforms": [
+		"web"
+	],
+	"entry": "index.ts"
 }

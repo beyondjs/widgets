@@ -26,8 +26,10 @@ abstract class WidgetServerController extends WidgetControllerBase {
 		super(params);
 		const styles = new DependenciesStyles(this.specs.vspecifier);
 		styles.elements.forEach(({ href }: { href: string }) => this.#styles.push(href));
+		styles.destroy?.();
 
-		this.#styles.unshift(`##_!${this.pkg}!_##global.css`);
+		// The shared stylesheet of the package, named by a placeholder the client resolves from the package
+		this.specs.global && this.#styles.unshift(`##_!${this.pkg}!_##global`);
 	}
 
 	abstract render(props: Record<string, any>): Promise<IWidgetRendered> | IWidgetRendered;

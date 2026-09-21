@@ -55,8 +55,9 @@ export class WidgetSR {
 			resource = checksum(key);
 		}
 
-		const host = await this.#widget.host;
-		const url = `${host}__sr_widgets__/${specs.name}.${resource}.js`;
+		const host = this.#widget.host;
+		if (!host) return;
+		const url = `${host}/__sr_widgets__/${specs.name}.${resource}.js`;
 
 		try {
 			const response = await fetch(url);

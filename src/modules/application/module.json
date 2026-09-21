@@ -1,6 +1,6 @@
 {
-	"name": "application",
-	"platforms": ["web", "android", "ios"],
-	"bundle": "ts",
-	"files": "*"
+	"platforms": [
+		"web"
+	],
+	"entry": "index.ts"
 }

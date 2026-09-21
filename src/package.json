@@ -34,5 +34,15 @@
 				}
 			}
 		]
+	},
+	"beyond": {
+		"modules": "./modules",
+		"bundler": "ts"
+	},
+	"bundlers": {
+		"ts": {
+			"specifier": "@beyond-js/packages/bundlers/ts",
+			"runtime": "@beyond-js/local-2026/bundle"
+		}
 	}
 }

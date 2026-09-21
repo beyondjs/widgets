@@ -8,8 +8,18 @@ interface IBeyondWidgetController {
 	initialise: () => Promise<void>;
 	attributeChanged: (name: string, old: string, value: string) => void;
 	disconnect: () => void;
+	reconnect?: () => void;
 }
 
+/**
+ * The client rendering of a widget: the import of its module, the construction of its controller and the
+ * moments the element allows it to mount.
+ *
+ * The module is imported when the element is constructed and the controller is created once the element
+ * is connected and the server paths completed. An element that is disconnected before its module arrived
+ * does not mount: the import completes, nothing is constructed, and a later connection mounts it then. A
+ * disconnected controller is told so, and told again when its element is connected again.
+ */
 export /*bundle*/
 class WidgetCSR extends Events {
 	readonly #widget: BeyondWidget;
@@ -41,11 +51,16 @@ class WidgetCSR extends Events {
 
 	#holders = new Set(['initialised', 'loaded']);
 
+	/**
+	 * Whether the element is connected, as far as this object was told
+	 */
+	#connected = false;
+
 	initialise() {
 		// Check if CSR is enabled (default) for this widget
 		if (!this.#widget.specs.render.csr) return;
 
-		if (!this.#holders.has('initialised')) throw new Error('Widget CSR already initialised');
+		this.#connected = true;
 		this.#holders.delete('initialised');
 		this.#render();
 	}
@@ -57,6 +72,7 @@ class WidgetCSR extends Events {
 		// Check if CSR is enabled (default) for this widget
 		if (!specs.render.csr) return;
 
+		this.#loading = true;
 		bimport(specifier)
 			.then((bundle: any) => {
 				this.#bundle = bundle;
@@ -74,7 +90,10 @@ class WidgetCSR extends Events {
 
 	#render = () => {
 		// Render the widget once the connectedCallback is called and the bundle was imported
-		if (this.#holders.size) return;
+		if (this.#holders.size || this.#controller) return;
+
+		// An element that was disconnected while its module was loading mounts when it is connected again
+		if (!this.#connected || !this.#widget.isConnected) return;
 
 		const { Controller } = this.#bundle;
 		if (!Controller || typeof Controller !== 'function') {
@@ -92,7 +111,13 @@ class WidgetCSR extends Events {
 	};
 
 	disconnect() {
+		this.#connected = false;
 		this.#controller?.disconnect?.();
+	}
+
+	reconnect() {
+		this.#connected = true;
+		this.#controller ? this.#controller.reconnect?.() : this.#render();
 	}
 
 	attributeChanged(name: string, old: string, value: string) {
