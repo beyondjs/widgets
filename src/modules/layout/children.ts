@@ -1,11 +1,13 @@
-import type { manager as m, LayoutInstance, PageInstance } from '@beyond-js/widgets/routing';
+import type { LayoutInstance, PageInstance } from '@beyond-js/widgets/routing';
+import { manager } from '@beyond-js/widgets/routing';
 import { widgets, BeyondWidget } from '@beyond-js/widgets/render';
 import { ssr } from './ssr';
 
-declare const bimport: (resource: string, version?: number) => Promise<any>;
-
-let manager: typeof m;
-
+/**
+ * The element that renders the children of a layout: the pages and layouts the routing manager activates
+ * inside it. The routing module is imported statically: on the Engine it was loaded on demand together
+ * with the generated `start` module of the application, which the development runtime does not have.
+ */
 customElements.define(
 	'beyond-layout-children',
 	class extends HTMLElement {
@@ -13,32 +15,19 @@ customElements.define(
 		#active: BeyondWidget;
 
 		connectedCallback() {
-			this.attachShadow({ mode: 'open' });
+			this.shadowRoot ?? this.attachShadow({ mode: 'open' });
 
-			const managed = () => {
-				const start = () => this.#start().catch(exc => console.error(exc.stack));
-				manager.initialised ? start() : manager.ready.then(start);
-			};
+			// While the manager has not resolved the first URI, render from the server hierarchy when there is one
+			!manager.initialised && (ssr.page ? this.#onssr() : ssr.addEventListener('received', this.#onssr));
 
-			// If the manager is already loaded, render without ssr
-			if (manager) return managed();
+			const start = () => this.#start().catch(exc => console.error(exc.stack));
+			manager.initialised ? start() : manager.ready.then(start);
+		}
 
-			// While the manager is not loaded, try to render from ssr
-			ssr.page ? this.#onssr() : ssr.addEventListener('received', this.#onssr);
-
-			const promises: Promise<any>[] = [];
-			promises.push(bimport('@beyond-js/widgets/routing'));
-			promises.push(bimport('@beyond-js/kernel/core'));
-
-			const { specifier } = (<any>globalThis).__app_package;
-			promises.push(bimport(`${specifier}/start`));
-
-			Promise.all(promises)
-				.then(([routing]) => {
-					({ manager } = routing);
-					managed();
-				})
-				.catch(exc => console.log(exc.stack));
+		disconnectedCallback() {
+			ssr.removeEventListener('received', this.#onssr);
+			this.#layout?.off('change', this.#render);
+			this.#layout = void 0;
 		}
 
 		/**
@@ -166,7 +155,7 @@ customElements.define(
 
 		async #start(): Promise<void> {
 			ssr.removeEventListener('received', this.#onssr);
-			if (this.container === null) return;
+			if (!this.isConnected || this.container === null) return;
 
 			const done = (layout: LayoutInstance) => {
 				this.#layout = layout;

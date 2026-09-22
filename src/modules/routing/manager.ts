@@ -6,9 +6,28 @@ import Pages from './pages';
 import Layouts from './layouts';
 import { Route } from './pages/route';
 
-declare const bimport: (resource: string, version?: number) => Promise<any>;
 declare const process: any;
 
+/**
+ * What an application tells the manager when it starts
+ */
+export interface IManagerSettings {
+	/**
+	 * The element name of the main layout of the application. Without it, the main layout is the
+	 * `beyond-layout-children` element the application places in the document.
+	 */
+	layout?: string;
+}
+
+/**
+ * Connects the current URI of the runtime's routing to the registered pages and layouts, and activates
+ * the hierarchy of layout and page instances the URI selects.
+ *
+ * The manager does nothing until the application calls `setup`: on the Engine it configured itself from
+ * the generated `config` and `start` modules of the application and the `__app_package` global, which the
+ * development runtime does not have. `ready` resolves after the first URI was resolved, whether or not a
+ * page was found for it.
+ */
 class Manager {
 	// The registry of all layouts (except the main layout) and pages instances registered in the session
 	readonly #instances = { layouts: new Layouts(), pages: new Pages() };
@@ -24,20 +43,9 @@ class Manager {
 		return this.#ready;
 	}
 
-	constructor() {
-		const set = () => this.set(routing.uri).catch(exc => console.log(exc.stack));
-
-		// @TODO: move to the setup method
-		const { specifier } = (<any>globalThis).__app_package;
-		Promise.all([bimport(`${specifier}/config`), bimport(`${specifier}/start`)]).then(([{ default: config }]) => {
-			// The main layout can be specified in the package.json,
-			// if it is not specified, then a beyond-layout-children will be
-			// set as default
-			this.#main = new LayoutInstance(this.#instances.layouts, config.layout);
-
-			routing.on('change', set);
-			routing.initialised ? set() : routing.ready.then(set);
-		});
+	#configured = false;
+	get configured() {
+		return this.#configured;
 	}
 
 	get layouts() {
@@ -48,12 +56,23 @@ class Manager {
 		return this.#instances.pages;
 	}
 
-	// The main layout can be a custom element specified in the package.json
-	// Otherwise, if it is not specified, the beyond-layout-children
-	// will be set as default
+	// The main layout: the element the application names, or the `beyond-layout-children` in the document
 	#main: LayoutInstance;
 	get main() {
 		return this.#main;
+	}
+
+	/**
+	 * Starts routing the pages: once, the first call wins
+	 */
+	setup(settings: IManagerSettings = {}) {
+		if (this.#configured) return;
+		this.#configured = true;
+		this.#main = new LayoutInstance(this.#instances.layouts, settings.layout);
+
+		const set = () => this.set(routing.uri).catch(exc => console.error(exc.stack));
+		routing.on('change', set);
+		routing.initialised ? set() : routing.ready.then(set);
 	}
 
 	#ct = new CancellationToken();

@@ -1,5 +1,5 @@
 import type { URI } from '@beyond-js/kernel/routing';
-import { Events } from '@beyond-js/events/events';
+import { Events } from '@beyond-js/kernel/core';
 import { Route } from './route';
 
 /**
