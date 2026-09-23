@@ -176,5 +176,6 @@ class StylesManager {
 
 	destroy() {
 		this.#globalcss.off('change', this.#refresh);
+		this.#globalcss.destroy();
 	}
 }

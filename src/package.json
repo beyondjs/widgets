@@ -35,6 +35,10 @@
 		]
 	},
 	"beyond": {
+		"publication": {
+			"protocol": "beyond-publication/1",
+			"form": "source"
+		},
 		"modules": "./modules",
 		"bundler": "ts"
 	},
