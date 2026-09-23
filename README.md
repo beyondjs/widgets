@@ -6,6 +6,7 @@ Widgets connects custom elements to independently loaded Beyond modules. A contr
 - [Rendering, styles and HMR](docs/rendering.md): CSR/SSR/SR sequences, resource protocols, hydration timing and current limits.
 - [Pages, layouts and startup](docs/routing.md): route matching, retained page instances, nested layout composition and application handoff.
 - [Coding standards](docs/coding-standards.md): binding file-length, object-oriented design and naming rules.
+- [Testing](docs/testing.md): where the package is validated, and what the illustrative `tests/` package is.
 
 Public modules include `@beyond-js/widgets/render`, `/controller`, `/routing`, `/layout` and `/application`. Browser and SSR render implementations share one public identity selected by platform. Framework adapters, the compiler, runtime module resolver and SSR HTTP service are separate dependencies; the core does not provide them automatically.
 
